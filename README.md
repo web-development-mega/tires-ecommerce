@@ -787,44 +787,141 @@ php artisan test --filter TireSearchTest
 
 ## 🚢 Despliegue
 
-### Producción
+### Laravel Cloud (Recomendado)
 
-1. **Configurar variables de entorno**
+Laravel Cloud proporciona un entorno optimizado para aplicaciones Laravel con configuración automática.
+
+#### 1. Conectar Repositorio
 
 ```bash
+# Instalar Laravel Cloud CLI
+composer global require laravel/cloud
+
+# Autenticar
+laravel cloud:auth
+
+# Conectar repositorio
+laravel cloud:init
+```
+
+#### 2. Configurar Variables de Entorno
+
+En el dashboard de Laravel Cloud, configura las siguientes variables:
+
+```env
 APP_ENV=production
 APP_DEBUG=false
+APP_URL=https://tires-ecommerce.laravel.cloud
+
+# Base de datos (Laravel Cloud proporciona MySQL automáticamente)
 DB_CONNECTION=mysql
+DB_HOST=${LARAVEL_CLOUD_DB_HOST}
+DB_PORT=${LARAVEL_CLOUD_DB_PORT}
+DB_DATABASE=${LARAVEL_CLOUD_DB_DATABASE}
+DB_USERNAME=${LARAVEL_CLOUD_DB_USERNAME}
+DB_PASSWORD=${LARAVEL_CLOUD_DB_PASSWORD}
+
+# Wompi Payment Gateway
+WOMPI_PUBLIC_KEY=pub_prod_xxxxx
+WOMPI_PRIVATE_KEY=prv_prod_xxxxx
+WOMPI_EVENTS_SECRET=xxxxx
+WOMPI_WEBHOOK_URL=${APP_URL}/api/payments/wompi/webhook
+
+# Mail
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.gmail.com
+MAIL_PORT=587
+MAIL_USERNAME=tu-email@gmail.com
+MAIL_PASSWORD=tu-app-password
+MAIL_ENCRYPTION=tls
+MAIL_FROM_ADDRESS=noreply@megallantas.com
+MAIL_FROM_NAME="Megallantas"
+
+# Queue (Laravel Cloud usa Redis automáticamente)
+QUEUE_CONNECTION=redis
+REDIS_HOST=${LARAVEL_CLOUD_REDIS_HOST}
+REDIS_PASSWORD=${LARAVEL_CLOUD_REDIS_PASSWORD}
+REDIS_PORT=${LARAVEL_CLOUD_REDIS_PORT}
+
+# Session & Cache
+SESSION_DRIVER=redis
+CACHE_DRIVER=redis
 ```
 
-2. **Optimizar aplicación**
+#### 3. Configurar Deploy Hooks
+
+Laravel Cloud ejecuta automáticamente las migraciones. Para seeders iniciales, usa:
+
+```yaml
+# .laravel-cloud.yml
+deploy:
+  - php artisan migrate --force
+  - php artisan db:seed --class=TiresCatalogSeeder --force
+  - php artisan optimize
+```
+
+#### 4. Configurar Dominio Personalizado
+
+En el dashboard de Laravel Cloud:
+1. Ve a **Settings → Domains**
+2. Agrega tu dominio: `api.megallantas.com`
+3. Configura los registros DNS según las instrucciones
+
+#### 5. Desplegar
 
 ```bash
-composer install --optimize-autoloader --no-dev
-php artisan config:cache
-php artisan route:cache
-php artisan view:cache
+# Push a main para desplegar automáticamente
+git push origin main
+
+# O usar el CLI
+laravel cloud:deploy
 ```
 
-3. **Migrar base de datos**
+#### 6. Verificar Deployment
 
 ```bash
-php artisan migrate --force
+# Ver logs en tiempo real
+laravel cloud:logs
+
+# Verificar status
+laravel cloud:status
 ```
 
-4. **Configurar servidor web (Nginx)**
+### Características de Laravel Cloud
+
+✅ **SSL Automático**: Certificados HTTPS gratuitos
+✅ **Auto-scaling**: Escala según demanda
+✅ **MySQL & Redis**: Incluidos y gestionados
+✅ **Backups Automáticos**: Diarios de base de datos
+✅ **Zero-downtime Deploys**: Sin interrupciones
+✅ **Monitoring**: Métricas y alertas integradas
+✅ **Queue Workers**: Gestionados automáticamente
+
+### Despliegue Manual (VPS/Servidor Tradicional)
+
+Si prefieres un servidor tradicional:
+
+#### 1. Requisitos del Servidor
+
+- Ubuntu 22.04 LTS
+- PHP 8.2 + extensiones
+- MySQL 8.0
+- Redis
+- Nginx
+- Supervisor (para queues)
+
+#### 2. Configurar Nginx
 
 ```nginx
 server {
     listen 80;
-    server_name megallantas.com;
+    server_name api.megallantas.com;
     root /var/www/tires-ecommerce/public;
 
     add_header X-Frame-Options "SAMEORIGIN";
     add_header X-Content-Type-Options "nosniff";
 
     index index.php;
-
     charset utf-8;
 
     location / {
@@ -840,12 +937,58 @@ server {
         fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
         fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
         include fastcgi_params;
+        fastcgi_hide_header X-Powered-By;
     }
 
     location ~ /\.(?!well-known).* {
         deny all;
     }
 }
+```
+
+#### 3. Configurar Queue Worker
+
+```ini
+# /etc/supervisor/conf.d/tires-ecommerce-worker.conf
+[program:tires-ecommerce-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php /var/www/tires-ecommerce/artisan queue:work redis --sleep=3 --tries=3 --max-time=3600
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=www-data
+numprocs=2
+redirect_stderr=true
+stdout_logfile=/var/www/tires-ecommerce/storage/logs/worker.log
+stopwaitsecs=3600
+```
+
+#### 4. Deploy Script
+
+```bash
+#!/bin/bash
+cd /var/www/tires-ecommerce
+
+# Modo mantenimiento
+php artisan down
+
+# Actualizar código
+git pull origin main
+
+# Instalar dependencias
+composer install --no-dev --optimize-autoloader
+
+# Optimizar
+php artisan optimize
+php artisan migrate --force
+
+# Reiniciar servicios
+php artisan queue:restart
+sudo supervisorctl restart tires-ecommerce-worker:*
+
+# Salir de mantenimiento
+php artisan up
 ```
 
 ## 📄 Licencia
