@@ -87,7 +87,11 @@ class Order extends Model
         return $datePart . '-' . $randomPart;
     }
 
-    // Relationships
+    /*
+    |--------------------------------------------------------------------------
+    | Relationships
+    |--------------------------------------------------------------------------
+    */
 
     public function user(): BelongsTo
     {
@@ -114,7 +118,11 @@ class Order extends Model
         return $this->hasMany(Payment::class);
     }
 
-    // Scopes
+    /*
+    |--------------------------------------------------------------------------
+    | Scopes
+    |--------------------------------------------------------------------------
+    */
 
     public function scopeForUser(Builder $query, int $userId): Builder
     {

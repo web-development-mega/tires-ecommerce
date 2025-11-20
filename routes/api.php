@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\OrderPaymentController;
 use App\Http\Controllers\Api\WompiWebhookController;
 use App\Http\Controllers\Api\ServiceLocationController;
+use App\Http\Controllers\Api\AuthController;
 
 
 Route::prefix('tires/search')->group(function () {
@@ -29,4 +30,14 @@ Route::post('payments/wompi/webhook', [WompiWebhookController::class, 'handle'])
 Route::prefix('service-locations')->group(function () {
     Route::get('/', [ServiceLocationController::class, 'index']);
     Route::get('{serviceLocation}', [ServiceLocationController::class, 'show']);
+});
+
+Route::prefix('auth')->group(function () {
+    Route::post('register', [AuthController::class, 'register']);
+    Route::post('login', [AuthController::class, 'login']);
+
+    Route::middleware('auth:sanctum')->group(function () {
+        Route::get('me', [AuthController::class, 'me']);
+        Route::post('logout', [AuthController::class, 'logout']);
+    });
 });
