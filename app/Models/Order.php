@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 use App\Models\ServiceLocation;
+use App\Models\Payment;
 
 class Order extends Model
 {
@@ -106,6 +107,11 @@ class Order extends Model
     public function serviceLocation(): BelongsTo
     {
         return $this->belongsTo(ServiceLocation::class, 'service_location_id');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 
     // Scopes
