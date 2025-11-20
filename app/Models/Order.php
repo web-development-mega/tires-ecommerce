@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
+use App\Models\ServiceLocation;
 
 class Order extends Model
 {
@@ -100,6 +101,11 @@ class Order extends Model
     public function items(): HasMany
     {
         return $this->hasMany(OrderItem::class);
+    }
+
+    public function serviceLocation(): BelongsTo
+    {
+        return $this->belongsTo(ServiceLocation::class, 'service_location_id');
     }
 
     // Scopes
