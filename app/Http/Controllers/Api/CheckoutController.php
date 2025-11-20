@@ -57,7 +57,9 @@ class CheckoutController extends Controller
             $request->checkoutData()
         );
 
-        return OrderResource::make($order->load('items'))
+        return OrderResource::make(
+            $order->load(['items', 'serviceLocation'])
+        )
             ->response()
             ->setStatusCode(Response::HTTP_CREATED);
     }

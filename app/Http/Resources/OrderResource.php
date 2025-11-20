@@ -15,7 +15,6 @@ class OrderResource extends JsonResource
             'order_number'  => $this->order_number,
             'status'        => $this->status?->value ?? $this->status,
             'currency'      => $this->currency,
-
             'items_count'   => $this->items_count,
 
             'totals'        => [
@@ -51,6 +50,24 @@ class OrderResource extends JsonResource
 
                 'service_location_id' => $this->service_location_id,
             ],
+
+            'service_location' => $this->whenLoaded('serviceLocation', function () {
+                return [
+                    'id'           => $this->serviceLocation->id,
+                    'name'         => $this->serviceLocation->name,
+                    'municipality' => $this->serviceLocation->city,
+                    'department'   => $this->serviceLocation->state,
+                    'address'      => [
+                        'line1'       => $this->serviceLocation->address_line1,
+                        'line2'       => $this->serviceLocation->address_line2,
+                        'postal_code' => $this->serviceLocation->postal_code,
+                    ],
+                    'contact'      => [
+                        'phone'    => $this->serviceLocation->phone,
+                        'whatsapp' => $this->serviceLocation->whatsapp,
+                    ],
+                ];
+            }),
 
             'meta'          => $this->meta,
 

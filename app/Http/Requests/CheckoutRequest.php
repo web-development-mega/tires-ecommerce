@@ -57,9 +57,10 @@ class CheckoutRequest extends FormRequest
             'service_location_id' => [
                 'required_if:delivery_type,' . OrderDeliveryType::SERVICE_LOCATION->value,
                 'integer',
+                'exists:service_locations,id',
             ],
 
-            // Totals (optional, backend puede recalcular en el futuro)
+            // Totals (optional, backend can recalc later)
             'shipping_total'  => ['sometimes', 'numeric', 'min:0'],
             'tax_total'       => ['sometimes', 'numeric', 'min:0'],
             'grand_total'     => ['sometimes', 'numeric', 'min:0'],

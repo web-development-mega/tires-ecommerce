@@ -29,8 +29,6 @@ class OrderPaymentController extends Controller
             $request->paymentData()
         );
 
-        // Aquí normalmente devolverías datos para que el front sepa
-        // cómo redirigir al checkout de Wompi / mostrar widget, etc.
         return response()->json([
             'payment' => [
                 'id'        => $payment->id,
@@ -38,9 +36,11 @@ class OrderPaymentController extends Controller
                 'status'    => $payment->status->value,
                 'amount'    => (float) $payment->amount,
                 'currency'  => $payment->currency,
-                // Podrías incluir 'wompi_checkout_url' si lo generas en PaymentService
+                // Aquí podrías incluir 'wompi_checkout_url' si lo generas en PaymentService
             ],
-            'order' => OrderResource::make($order),
+            'order' => OrderResource::make(
+                $order->load(['items', 'serviceLocation'])
+            ),
         ], Response::HTTP_CREATED);
     }
 }
