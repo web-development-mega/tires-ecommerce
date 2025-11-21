@@ -20,26 +20,47 @@ class TireResource extends JsonResource
             'slug'          => $this->slug,
             'pattern'       => $this->pattern,
             'usage'         => $this->usage?->value,
-            'brand'         => [
-                'id'   => $this->brand->id,
-                'name' => $this->brand->name,
-                'slug' => $this->brand->slug,
-            ],
-            'size'          => [
-                'id'            => $this->tireSize->id,
-                'label'         => $this->tireSize->label,
-                'width'         => $this->tireSize->width,
-                'aspect_ratio'  => $this->tireSize->aspect_ratio,
-                'rim_diameter'  => $this->tireSize->rim_diameter,
-            ],
+
+            // Brand: protegido con whenLoaded para evitar errores si no se eager-loadea
+            'brand'         => $this->whenLoaded('brand', function () {
+                return [
+                    'id'   => $this->brand->id,
+                    'name' => $this->brand->name,
+                    'slug' => $this->brand->slug,
+                ];
+            }),
+
+            // Size: idem, y añadimos un display calculado si es posible
+            'size'          => $this->whenLoaded('tireSize', function () {
+                $size = $this->tireSize;
+
+                $display = null;
+                if ($size->width && $size->aspect_ratio && $size->rim_diameter) {
+                    $display = sprintf(
+                        '%d/%dR%d',
+                        $size->width,
+                        $size->aspect_ratio,
+                        $size->rim_diameter
+                    );
+                }
+
+                return [
+                    'id'            => $size->id,
+                    'label'         => $size->label,
+                    'width'         => $size->width,
+                    'aspect_ratio'  => $size->aspect_ratio,
+                    'rim_diameter'  => $size->rim_diameter,
+                    'display'       => $display,
+                ];
+            }),
 
             'load_index'    => $this->load_index,
             'speed_rating'  => $this->speed_rating,
 
             'utqg'          => [
-                'treadwear'  => $this->utqg_treadwear,
-                'traction'   => $this->utqg_traction,
-                'temperature'=> $this->utqg_temperature,
+                'treadwear'   => $this->utqg_treadwear,
+                'traction'    => $this->utqg_traction,
+                'temperature' => $this->utqg_temperature,
             ],
 
             'label'         => [
@@ -50,18 +71,18 @@ class TireResource extends JsonResource
             ],
 
             'flags'         => [
-                'is_runflat'     => $this->is_runflat,
-                'is_all_terrain' => $this->is_all_terrain,
-                'is_highway'     => $this->is_highway,
-                'is_winter'      => $this->is_winter,
-                'is_summer'      => $this->is_summer,
+                'is_runflat'     => (bool) $this->is_runflat,
+                'is_all_terrain' => (bool) $this->is_all_terrain,
+                'is_highway'     => (bool) $this->is_highway,
+                'is_winter'      => (bool) $this->is_winter,
+                'is_summer'      => (bool) $this->is_summer,
             ],
 
             'pricing'       => [
-                'base_price'     => (float) $this->base_price,
-                'sale_price'     => $this->sale_price !== null ? (float) $this->sale_price : null,
-                'effective_price'=> (float) $this->effective_price,
-                'currency'       => $this->currency,
+                'base_price'      => $this->base_price !== null ? (float) $this->base_price : null,
+                'sale_price'      => $this->sale_price !== null ? (float) $this->sale_price : null,
+                'effective_price' => $this->effective_price !== null ? (float) $this->effective_price : null,
+                'currency'        => $this->currency,
             ],
 
             'country_of_origin' => $this->country_of_origin,

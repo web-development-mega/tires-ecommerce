@@ -8,7 +8,7 @@ use App\Http\Controllers\Api\OrderPaymentController;
 use App\Http\Controllers\Api\WompiWebhookController;
 use App\Http\Controllers\Api\ServiceLocationController;
 use App\Http\Controllers\Api\AuthController;
-
+use App\Http\Controllers\Api\TireController;
 
 Route::prefix('tires/search')->group(function () {
     Route::get('by-vehicle', [TireSearchController::class, 'byVehicle']);
@@ -40,4 +40,10 @@ Route::prefix('auth')->group(function () {
         Route::get('me', [AuthController::class, 'me']);
         Route::post('logout', [AuthController::class, 'logout']);
     });
+});
+
+
+Route::prefix('tires')->group(function () {
+    Route::get('/', [TireController::class, 'index']);
+    Route::get('{tire}', [TireController::class, 'show']);
 });
