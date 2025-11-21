@@ -66,6 +66,25 @@ API REST backend para plataforma de e-commerce de llantas y servicios automotric
 - ✅ Tipos de servicio (instalación, alineación, balanceo, etc.)
 - ✅ Geolocalización (lat/lng)
 
+### Gestión B2B (Empresas y Flotas)
+- ✅ Gestión de empresas corporativas (flotas, distribuidores, otros)
+- ✅ Contactos empresariales con roles
+- ✅ Gestión de flotas vehiculares
+- ✅ Vehículos de flota con placas, VIN y alias
+- ✅ Contratos empresariales con estados
+- ✅ Reglas de precios especiales por contrato
+- ✅ Descuentos por volumen y tipo de producto
+- ✅ Precios diferenciados por: producto, marca, categoría, medida
+- ✅ Límites de crédito y términos de pago
+- ✅ Vigencia de contratos y reglas de precio
+
+### Catálogo Público de Llantas
+- ✅ Listado público con filtros básicos
+- ✅ Búsqueda por marca (ID o slug)
+- ✅ Filtros por medida (ancho/perfil/rin)
+- ✅ Filtros por características (runflat, all-terrain)
+- ✅ Vista detallada de producto
+
 ## 🏗️ Arquitectura
 
 ### Estructura del Proyecto
@@ -74,9 +93,13 @@ API REST backend para plataforma de e-commerce de llantas y servicios automotric
 app/
 ├── Enums/              # Enumeraciones PHP 8.2
 │   ├── CartStatus.php
+│   ├── CompanyType.php
+│   ├── CompanyContractStatus.php
 │   ├── FitmentPosition.php
 │   ├── OrderStatus.php
 │   ├── PaymentStatus.php
+│   ├── PriceAdjustmentType.php
+│   ├── PriceTargetType.php
 │   ├── TireUsage.php
 │   └── VehicleType.php
 ├── Http/
@@ -86,6 +109,7 @@ app/
 │   │   ├── CheckoutController.php
 │   │   ├── OrderPaymentController.php
 │   │   ├── ServiceLocationController.php
+│   │   ├── TireController.php
 │   │   ├── TireSearchController.php
 │   │   └── WompiWebhookController.php
 │   ├── Requests/       # Form Request Validation
@@ -94,6 +118,12 @@ app/
 │   ├── Brand.php
 │   ├── Cart.php
 │   ├── CartItem.php
+│   ├── Company.php
+│   ├── CompanyContact.php
+│   ├── CompanyContract.php
+│   ├── CompanyPriceRule.php
+│   ├── Fleet.php
+│   ├── FleetVehicle.php
 │   ├── Order.php
 │   ├── Payment.php
 │   ├── ServiceLocation.php
@@ -246,6 +276,12 @@ vehicle_brands ──< vehicle_lines ──< vehicle_versions
 carts ──< cart_items >── (polymorphic: tires)
 
 service_locations >──< service_types
+
+companies ──< company_contacts
+    │
+    ├──< fleets ──< fleet_vehicles >── vehicles
+    │
+    └──< company_contracts ──< company_price_rules
 ```
 
 ### Migraciones Principales
@@ -267,8 +303,103 @@ service_locations >──< service_types
 | `payments` | Pagos asociados a órdenes |
 | `payment_transactions` | Transacciones de pago |
 | `service_locations` | Talleres y puntos de servicio |
+| `companies` | Empresas B2B (flotas, distribuidores, corporativos) |
+| `company_contacts` | Contactos de empresas |
+| `fleets` | Flotas vehiculares de empresas |
+| `fleet_vehicles` | Vehículos específicos en flotas |
+| `company_contracts` | Contratos empresariales |
+| `company_price_rules` | Reglas de precios especiales por contrato |
 
 ## 🔌 API Endpoints
+
+### Catálogo Público de Llantas
+
+#### Listar Llantas
+
+```http
+GET /api/tires
+```
+
+**Query Parameters:**
+
+| Parámetro | Tipo | Requerido | Descripción |
+|-----------|------|-----------|-------------|
+| `brand_id` | integer | ❌ | Filtrar por ID de marca |
+| `brand_slug` | string | ❌ | Filtrar por slug de marca |
+| `width` | integer | ❌ | Ancho de llanta (100-400) |
+| `profile` | integer | ❌ | Perfil/aspect ratio (20-90) |
+| `rim` | integer | ❌ | Diámetro de rin (10-26) |
+| `runflat` | boolean | ❌ | Solo llantas runflat |
+| `all_terrain` | boolean | ❌ | Solo llantas all-terrain |
+| `per_page` | integer | ❌ | Items por página (1-100) |
+
+**Ejemplo:**
+
+```bash
+curl "http://localhost:8000/api/tires?brand_slug=michelin&width=205&profile=55&rim=16&per_page=20"
+```
+
+**Respuesta:**
+
+```json
+{
+  "data": [
+    {
+      "id": 1,
+      "sku": "MICH-PRIM-205-55-16",
+      "name": "Michelin Primacy 4 205/55R16",
+      "slug": "michelin-primacy-4-205-55-r16",
+      "pattern": "Primacy 4",
+      "usage": "passenger",
+      "brand": {
+        "id": 1,
+        "name": "Michelin",
+        "slug": "michelin"
+      },
+      "size": {
+        "id": 1,
+        "label": "205/55 R16.0",
+        "width": 205,
+        "aspect_ratio": 55,
+        "rim_diameter": 16.0
+      },
+      "load_index": 91,
+      "speed_rating": "V",
+      "flags": {
+        "is_runflat": false,
+        "is_all_terrain": false,
+        "is_highway": false,
+        "is_winter": false,
+        "is_summer": true
+      },
+      "pricing": {
+        "base_price": 450000.00,
+        "sale_price": null,
+        "effective_price": 450000.00,
+        "currency": "COP"
+      }
+    }
+  ],
+  "links": { /* ... */ },
+  "meta": {
+    "current_page": 1,
+    "per_page": 20,
+    "total": 15
+  }
+}
+```
+
+#### Ver Detalle de Llanta
+
+```http
+GET /api/tires/{id}
+```
+
+**Ejemplo:**
+
+```bash
+curl "http://localhost:8000/api/tires/1"
+```
 
 ### Búsqueda de Llantas
 
