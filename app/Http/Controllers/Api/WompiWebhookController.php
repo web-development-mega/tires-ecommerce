@@ -12,8 +12,7 @@ class WompiWebhookController extends Controller
 {
     public function __construct(
         private readonly PaymentService $paymentService
-    ) {
-    }
+    ) {}
 
     /**
      * POST /api/payments/wompi/webhook

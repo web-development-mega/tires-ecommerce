@@ -3,11 +3,11 @@
 namespace App\Models;
 
 use App\Enums\VehicleType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Vehicle extends Model
@@ -28,9 +28,9 @@ class Vehicle extends Model
     ];
 
     protected $casts = [
-        'year'      => 'integer',
+        'year' => 'integer',
         'is_active' => 'boolean',
-        'type'      => VehicleType::class,
+        'type' => VehicleType::class,
     ];
 
     public function brand(): BelongsTo

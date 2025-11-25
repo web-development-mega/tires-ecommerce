@@ -28,14 +28,14 @@ class CompanyPriceRule extends Model
     ];
 
     protected $casts = [
-        'target_type'     => PriceTargetType::class,
+        'target_type' => PriceTargetType::class,
         'adjustment_type' => PriceAdjustmentType::class,
-        'value'           => 'decimal:2',
-        'min_quantity'    => 'integer',
-        'is_active'       => 'boolean',
-        'valid_from'      => 'datetime',
-        'valid_until'     => 'datetime',
-        'meta'            => 'array',
+        'value' => 'decimal:2',
+        'min_quantity' => 'integer',
+        'is_active' => 'boolean',
+        'valid_from' => 'datetime',
+        'valid_until' => 'datetime',
+        'meta' => 'array',
     ];
 
     public function contract(): BelongsTo

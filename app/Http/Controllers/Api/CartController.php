@@ -17,8 +17,7 @@ class CartController extends Controller
 {
     public function __construct(
         private readonly CartService $cartService
-    ) {
-    }
+    ) {}
 
     /**
      * GET /api/cart
@@ -27,7 +26,7 @@ class CartController extends Controller
     public function show(Request $request): JsonResponse
     {
         $cartToken = $request->query('cart_token');
-        $user      = $request->user(); // null if not authenticated
+        $user = $request->user(); // null if not authenticated
 
         $cart = $this->cartService->getOrCreateCart($cartToken, $user);
 
@@ -46,7 +45,7 @@ class CartController extends Controller
      */
     public function addItem(AddCartItemRequest $request): JsonResponse
     {
-        $user      = $request->user();
+        $user = $request->user();
         $cartToken = $request->cartToken();
 
         $cart = $this->cartService->getOrCreateCart($cartToken, $user);
@@ -75,7 +74,7 @@ class CartController extends Controller
         UpdateCartItemRequest $request,
         CartItem $item
     ): JsonResponse {
-        $user      = $request->user();
+        $user = $request->user();
         $cartToken = $request->cartToken();
 
         // Basic security: ensure item belongs to user's / token's cart
@@ -97,7 +96,7 @@ class CartController extends Controller
      */
     public function removeItem(Request $request, CartItem $item): JsonResponse
     {
-        $user      = $request->user();
+        $user = $request->user();
         $cartToken = $request->input('cart_token') ?? $request->query('cart_token');
 
         $this->assertItemBelongsToContext($item, $user?->id, $cartToken);

@@ -23,10 +23,10 @@ class VehicleTireFitment extends Model
     ];
 
     protected $casts = [
-        'is_oem'        => 'boolean',
-        'is_primary'    => 'boolean',
-        'min_load_index'=> 'integer',
-        'position'      => FitmentPosition::class,
+        'is_oem' => 'boolean',
+        'is_primary' => 'boolean',
+        'min_load_index' => 'integer',
+        'position' => FitmentPosition::class,
     ];
 
     public function vehicle(): BelongsTo

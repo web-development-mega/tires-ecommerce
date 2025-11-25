@@ -33,11 +33,11 @@ class Company extends Model
     ];
 
     protected $casts = [
-        'type'              => CompanyType::class,
-        'credit_limit'      => 'decimal:2',
-        'payment_terms_days'=> 'integer',
-        'is_active'         => 'boolean',
-        'meta'              => 'array',
+        'type' => CompanyType::class,
+        'credit_limit' => 'decimal:2',
+        'payment_terms_days' => 'integer',
+        'is_active' => 'boolean',
+        'meta' => 'array',
     ];
 
     // Relationships

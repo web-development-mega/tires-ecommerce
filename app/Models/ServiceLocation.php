@@ -34,11 +34,11 @@ class ServiceLocation extends Model
     ];
 
     protected $casts = [
-        'latitude'      => 'float',
-        'longitude'     => 'float',
+        'latitude' => 'float',
+        'longitude' => 'float',
         'opening_hours' => 'array',
-        'is_active'     => 'boolean',
-        'meta'          => 'array',
+        'is_active' => 'boolean',
+        'meta' => 'array',
     ];
 
     protected static function booted(): void
@@ -93,6 +93,7 @@ class ServiceLocation extends Model
         $map = collect(MetroMunicipality::cases())
             ->mapWithKeys(function (MetroMunicipality $m) {
                 $key = Str::of($m->value)->lower()->slug(' ')->value();
+
                 return [$key => $m->value];
             });
 

@@ -14,8 +14,7 @@ class CheckoutController extends Controller
 {
     public function __construct(
         private readonly OrderService $orderService
-    ) {
-    }
+    ) {}
 
     /**
      * POST /api/checkout
@@ -24,7 +23,7 @@ class CheckoutController extends Controller
      */
     public function store(CheckoutRequest $request): JsonResponse
     {
-        $user      = $request->user(); // null for guests
+        $user = $request->user(); // null for guests
         $cartToken = $request->cartToken();
 
         $cartQuery = Cart::query()
@@ -38,7 +37,7 @@ class CheckoutController extends Controller
                 // Ensure cart belongs to this user or is still guest cart
                 $cartQuery->where(function ($q) use ($user) {
                     $q->whereNull('user_id')
-                      ->orWhere('user_id', $user->id);
+                        ->orWhere('user_id', $user->id);
                 });
             }
         } elseif ($user) {

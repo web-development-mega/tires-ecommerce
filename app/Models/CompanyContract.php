@@ -26,12 +26,12 @@ class CompanyContract extends Model
     ];
 
     protected $casts = [
-        'status'            => CompanyContractStatus::class,
-        'start_date'        => 'date',
-        'end_date'          => 'date',
-        'credit_limit'      => 'decimal:2',
-        'payment_terms_days'=> 'integer',
-        'meta'              => 'array',
+        'status' => CompanyContractStatus::class,
+        'start_date' => 'date',
+        'end_date' => 'date',
+        'credit_limit' => 'decimal:2',
+        'payment_terms_days' => 'integer',
+        'meta' => 'array',
     ];
 
     public function company(): BelongsTo

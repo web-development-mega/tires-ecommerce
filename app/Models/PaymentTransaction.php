@@ -21,9 +21,9 @@ class PaymentTransaction extends Model
     ];
 
     protected $casts = [
-        'status'      => PaymentTransactionStatus::class,
+        'status' => PaymentTransactionStatus::class,
         'raw_payload' => 'array',
-        'meta'        => 'array',
+        'meta' => 'array',
     ];
 
     public function payment(): BelongsTo

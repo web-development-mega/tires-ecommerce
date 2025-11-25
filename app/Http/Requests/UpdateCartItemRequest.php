@@ -15,7 +15,7 @@ class UpdateCartItemRequest extends FormRequest
     {
         return [
             'cart_token' => ['sometimes', 'string', 'max:64'],
-            'quantity'   => ['required', 'integer', 'min:1', 'max:100'],
+            'quantity' => ['required', 'integer', 'min:1', 'max:100'],
         ];
     }
 

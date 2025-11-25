@@ -16,8 +16,8 @@ class CreateOrderPaymentRequest extends FormRequest
     {
         return [
             'payment_method_type' => ['sometimes', 'string', 'max:50'],
-            'amount'              => ['sometimes', 'numeric', 'min:0'],
-            'meta'                => ['sometimes', 'array'],
+            'amount' => ['sometimes', 'numeric', 'min:0'],
+            'meta' => ['sometimes', 'array'],
         ];
     }
 
@@ -25,8 +25,8 @@ class CreateOrderPaymentRequest extends FormRequest
     {
         return [
             'payment_method_type' => $this->input('payment_method_type'),
-            'amount'              => $this->input('amount'),
-            'meta'                => $this->input('meta'),
+            'amount' => $this->input('amount'),
+            'meta' => $this->input('meta'),
         ];
     }
 }

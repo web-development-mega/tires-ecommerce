@@ -10,8 +10,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
-use App\Models\ServiceLocation;
-use App\Models\Payment;
 
 class Order extends Model
 {
@@ -47,15 +45,15 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'status'          => OrderStatus::class,
-        'delivery_type'   => OrderDeliveryType::class,
-        'subtotal'        => 'decimal:2',
-        'discount_total'  => 'decimal:2',
-        'tax_total'       => 'decimal:2',
-        'shipping_total'  => 'decimal:2',
-        'grand_total'     => 'decimal:2',
-        'items_count'     => 'integer',
-        'meta'            => 'array',
+        'status' => OrderStatus::class,
+        'delivery_type' => OrderDeliveryType::class,
+        'subtotal' => 'decimal:2',
+        'discount_total' => 'decimal:2',
+        'tax_total' => 'decimal:2',
+        'shipping_total' => 'decimal:2',
+        'grand_total' => 'decimal:2',
+        'items_count' => 'integer',
+        'meta' => 'array',
     ];
 
     protected static function booted(): void
@@ -84,7 +82,7 @@ class Order extends Model
         $datePart = now()->format('Ymd');
         $randomPart = Str::upper(Str::random(6));
 
-        return $datePart . '-' . $randomPart;
+        return $datePart.'-'.$randomPart;
     }
 
     /*

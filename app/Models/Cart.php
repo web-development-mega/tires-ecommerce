@@ -27,12 +27,12 @@ class Cart extends Model
     ];
 
     protected $casts = [
-        'status'         => CartStatus::class,
-        'subtotal'       => 'decimal:2',
+        'status' => CartStatus::class,
+        'subtotal' => 'decimal:2',
         'discount_total' => 'decimal:2',
-        'grand_total'    => 'decimal:2',
-        'items_count'    => 'integer',
-        'meta'           => 'array',
+        'grand_total' => 'decimal:2',
+        'items_count' => 'integer',
+        'meta' => 'array',
     ];
 
     protected static function booted(): void

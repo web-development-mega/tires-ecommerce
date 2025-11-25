@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\VehicleType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\VehicleType;
 
 return new class extends Migration
 {

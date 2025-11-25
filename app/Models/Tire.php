@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use App\Enums\TireUsage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Tire extends Model
@@ -42,18 +42,18 @@ class Tire extends Model
     ];
 
     protected $casts = [
-        'load_index'        => 'integer',
-        'utqg_treadwear'    => 'integer',
-        'noise_db'          => 'integer',
-        'is_runflat'        => 'boolean',
-        'is_all_terrain'    => 'boolean',
-        'is_highway'        => 'boolean',
-        'is_winter'         => 'boolean',
-        'is_summer'         => 'boolean',
-        'is_active'         => 'boolean',
-        'base_price'        => 'decimal:2',
-        'sale_price'        => 'decimal:2',
-        'usage'             => TireUsage::class,
+        'load_index' => 'integer',
+        'utqg_treadwear' => 'integer',
+        'noise_db' => 'integer',
+        'is_runflat' => 'boolean',
+        'is_all_terrain' => 'boolean',
+        'is_highway' => 'boolean',
+        'is_winter' => 'boolean',
+        'is_summer' => 'boolean',
+        'is_active' => 'boolean',
+        'base_price' => 'decimal:2',
+        'sale_price' => 'decimal:2',
+        'usage' => TireUsage::class,
     ];
 
     // Relationships

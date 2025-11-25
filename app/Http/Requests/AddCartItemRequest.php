@@ -16,8 +16,8 @@ class AddCartItemRequest extends FormRequest
         return [
             'cart_token' => ['sometimes', 'string', 'max:64'],
 
-            'tire_id'    => ['required', 'integer', 'exists:tires,id'],
-            'quantity'   => ['sometimes', 'integer', 'min:1', 'max:100'],
+            'tire_id' => ['required', 'integer', 'exists:tires,id'],
+            'quantity' => ['sometimes', 'integer', 'min:1', 'max:100'],
         ];
     }
 

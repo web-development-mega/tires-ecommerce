@@ -43,14 +43,14 @@ class PaymentService
             $reference = $this->generatePaymentReference($order);
 
             $payment = new Payment([
-                'order_id'           => $order->id,
-                'provider'           => 'wompi',
-                'reference'          => $reference,
-                'status'             => PaymentStatus::PENDING,
-                'amount'             => $amount,
-                'currency'           => $order->currency ?? 'COP',
-                'payment_method_type'=> $paymentMethodType,
-                'meta'               => $data['meta'] ?? null,
+                'order_id' => $order->id,
+                'provider' => 'wompi',
+                'reference' => $reference,
+                'status' => PaymentStatus::PENDING,
+                'amount' => $amount,
+                'currency' => $order->currency ?? 'COP',
+                'payment_method_type' => $paymentMethodType,
+                'meta' => $data['meta'] ?? null,
             ]);
 
             $payment->save();
@@ -72,7 +72,7 @@ class PaymentService
         // Simple example: "ORDER-{order_number}-{random}"
         $random = Str::upper(Str::random(6));
 
-        return 'ORDER-' . $order->order_number . '-' . $random;
+        return 'ORDER-'.$order->order_number.'-'.$random;
     }
 
     /**
@@ -128,11 +128,11 @@ class PaymentService
             $txStatus = $this->mapWompiStatusToTransactionStatus($status);
 
             $paymentTransaction = new PaymentTransaction([
-                'payment_id'    => $payment->id,
-                'provider'      => 'wompi',
-                'provider_event'=> $event ?? $status,
-                'status'        => $txStatus,
-                'raw_payload'   => $payload,
+                'payment_id' => $payment->id,
+                'provider' => 'wompi',
+                'provider_event' => $event ?? $status,
+                'status' => $txStatus,
+                'raw_payload' => $payload,
             ]);
 
             $paymentTransaction->save();
@@ -173,9 +173,9 @@ class PaymentService
         return match (strtoupper((string) $wompiStatus)) {
             'APPROVED' => PaymentStatus::APPROVED,
             'DECLINED' => PaymentStatus::DECLINED,
-            'VOIDED'   => PaymentStatus::CANCELLED,
-            'ERROR'    => PaymentStatus::ERROR,
-            default    => PaymentStatus::PENDING,
+            'VOIDED' => PaymentStatus::CANCELLED,
+            'ERROR' => PaymentStatus::ERROR,
+            default => PaymentStatus::PENDING,
         };
     }
 
@@ -184,18 +184,18 @@ class PaymentService
         return match (strtoupper((string) $wompiStatus)) {
             'APPROVED' => PaymentTransactionStatus::SUCCEEDED,
             'DECLINED', 'VOIDED', 'ERROR' => PaymentTransactionStatus::FAILED,
-            default    => PaymentTransactionStatus::PENDING,
+            default => PaymentTransactionStatus::PENDING,
         };
     }
 
     protected function mapWompiPaymentMethodType(string $type): PaymentMethodType
     {
         return match (strtolower($type)) {
-            'card'      => PaymentMethodType::CARD,
-            'pse'       => PaymentMethodType::PSE,
-            'nequi'     => PaymentMethodType::NEQUI,
+            'card' => PaymentMethodType::CARD,
+            'pse' => PaymentMethodType::PSE,
+            'nequi' => PaymentMethodType::NEQUI,
             'daviplata' => PaymentMethodType::DAVIPLATA,
-            default     => PaymentMethodType::OTHER,
+            default => PaymentMethodType::OTHER,
         };
     }
 }

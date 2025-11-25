@@ -23,8 +23,8 @@ class ListServiceLocationsRequest extends FormRequest
         return [
             'municipality' => ['sometimes', 'string', Rule::in($municipalities)],
             'service_slug' => ['sometimes', 'string', 'max:150'],
-            'only_active'  => ['sometimes', 'boolean'],
-            'per_page'     => ['sometimes', 'integer', 'min:1', 'max:100'],
+            'only_active' => ['sometimes', 'boolean'],
+            'per_page' => ['sometimes', 'integer', 'min:1', 'max:100'],
         ];
     }
 
@@ -33,7 +33,7 @@ class ListServiceLocationsRequest extends FormRequest
         return [
             'municipality' => $this->input('municipality'),
             'service_slug' => $this->input('service_slug'),
-            'only_active'  => $this->boolean('only_active', true),
+            'only_active' => $this->boolean('only_active', true),
         ];
     }
 

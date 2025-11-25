@@ -2,10 +2,10 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
 
 class TireSize extends Model
 {
@@ -20,10 +20,10 @@ class TireSize extends Model
     ];
 
     protected $casts = [
-        'width'        => 'integer',
+        'width' => 'integer',
         'aspect_ratio' => 'integer',
         'rim_diameter' => 'float',
-        'is_active'    => 'boolean',
+        'is_active' => 'boolean',
     ];
 
     protected $appends = [

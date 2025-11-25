@@ -24,15 +24,15 @@ class AuthController extends Controller
 
         /** @var User $user */
         $user = User::create([
-            'name'     => $data['name'],
-            'email'    => $data['email'],
+            'name' => $data['name'],
+            'email' => $data['email'],
             'password' => Hash::make($data['password']),
         ]);
 
         $token = $user->createToken('api')->plainTextToken;
 
         return response()->json([
-            'user'  => UserResource::make($user),
+            'user' => UserResource::make($user),
             'token' => $token,
         ], Response::HTTP_CREATED);
     }
@@ -56,7 +56,7 @@ class AuthController extends Controller
         $token = $user->createToken('api')->plainTextToken;
 
         return response()->json([
-            'user'  => UserResource::make($user),
+            'user' => UserResource::make($user),
             'token' => $token,
         ], Response::HTTP_OK);
     }
@@ -90,12 +90,12 @@ class AuthController extends Controller
         $user->load([
             'orders' => function ($q) {
                 $q->with(['items', 'serviceLocation', 'payments'])
-                  ->latest();
+                    ->latest();
             },
         ]);
 
         return response()->json([
-            'user'   => UserResource::make($user),
+            'user' => UserResource::make($user),
             'orders' => OrderResource::collection($user->orders),
         ], Response::HTTP_OK);
     }

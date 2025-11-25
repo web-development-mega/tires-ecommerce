@@ -11,41 +11,41 @@ class OrderResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'            => $this->id,
-            'order_number'  => $this->order_number,
-            'status'        => $this->status?->value ?? $this->status,
-            'currency'      => $this->currency,
-            'items_count'   => $this->items_count,
+            'id' => $this->id,
+            'order_number' => $this->order_number,
+            'status' => $this->status?->value ?? $this->status,
+            'currency' => $this->currency,
+            'items_count' => $this->items_count,
 
-            'totals'        => [
-                'subtotal'       => (float) $this->subtotal,
+            'totals' => [
+                'subtotal' => (float) $this->subtotal,
                 'discount_total' => (float) $this->discount_total,
-                'tax_total'      => (float) $this->tax_total,
+                'tax_total' => (float) $this->tax_total,
                 'shipping_total' => (float) $this->shipping_total,
-                'grand_total'    => (float) $this->grand_total,
+                'grand_total' => (float) $this->grand_total,
             ],
 
-            'customer'      => [
+            'customer' => [
                 'first_name' => $this->customer_first_name,
-                'last_name'  => $this->customer_last_name,
-                'email'      => $this->customer_email,
-                'phone'      => $this->customer_phone,
-                'document'   => [
-                    'type'   => $this->document_type,
+                'last_name' => $this->customer_last_name,
+                'email' => $this->customer_email,
+                'phone' => $this->customer_phone,
+                'document' => [
+                    'type' => $this->document_type,
                     'number' => $this->document_number,
                 ],
             ],
 
-            'delivery'      => [
+            'delivery' => [
                 'type' => $this->delivery_type?->value ?? $this->delivery_type,
 
                 'shipping_address' => [
-                    'line1'       => $this->shipping_address_line1,
-                    'line2'       => $this->shipping_address_line2,
-                    'city'        => $this->shipping_city,
-                    'state'       => $this->shipping_state,
+                    'line1' => $this->shipping_address_line1,
+                    'line2' => $this->shipping_address_line2,
+                    'city' => $this->shipping_city,
+                    'state' => $this->shipping_state,
                     'postal_code' => $this->shipping_postal_code,
-                    'country'     => $this->shipping_country,
+                    'country' => $this->shipping_country,
                 ],
 
                 'service_location_id' => $this->service_location_id,
@@ -53,30 +53,30 @@ class OrderResource extends JsonResource
 
             'service_location' => $this->whenLoaded('serviceLocation', function () {
                 return [
-                    'id'           => $this->serviceLocation->id,
-                    'name'         => $this->serviceLocation->name,
+                    'id' => $this->serviceLocation->id,
+                    'name' => $this->serviceLocation->name,
                     'municipality' => $this->serviceLocation->city,
-                    'department'   => $this->serviceLocation->state,
-                    'address'      => [
-                        'line1'       => $this->serviceLocation->address_line1,
-                        'line2'       => $this->serviceLocation->address_line2,
+                    'department' => $this->serviceLocation->state,
+                    'address' => [
+                        'line1' => $this->serviceLocation->address_line1,
+                        'line2' => $this->serviceLocation->address_line2,
                         'postal_code' => $this->serviceLocation->postal_code,
                     ],
-                    'contact'      => [
-                        'phone'    => $this->serviceLocation->phone,
+                    'contact' => [
+                        'phone' => $this->serviceLocation->phone,
                         'whatsapp' => $this->serviceLocation->whatsapp,
                     ],
                 ];
             }),
 
-            'meta'          => $this->meta,
+            'meta' => $this->meta,
 
-            'items'         => OrderItemResource::collection(
+            'items' => OrderItemResource::collection(
                 $this->whenLoaded('items')
             ),
 
-            'created_at'    => $this->created_at?->toIso8601String(),
-            'updated_at'    => $this->updated_at?->toIso8601String(),
+            'created_at' => $this->created_at?->toIso8601String(),
+            'updated_at' => $this->updated_at?->toIso8601String(),
         ];
     }
 }

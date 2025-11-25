@@ -21,7 +21,7 @@ class Fleet extends Model
 
     protected $casts = [
         'is_active' => 'boolean',
-        'meta'      => 'array',
+        'meta' => 'array',
     ];
 
     public function company(): BelongsTo

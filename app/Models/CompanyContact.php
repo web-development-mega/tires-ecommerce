@@ -24,7 +24,7 @@ class CompanyContact extends Model
 
     protected $casts = [
         'is_primary' => 'boolean',
-        'meta'       => 'array',
+        'meta' => 'array',
     ];
 
     public function company(): BelongsTo

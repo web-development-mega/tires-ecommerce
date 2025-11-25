@@ -14,8 +14,7 @@ class OrderPaymentController extends Controller
 {
     public function __construct(
         private readonly PaymentService $paymentService
-    ) {
-    }
+    ) {}
 
     /**
      * POST /api/orders/{order}/payments
@@ -31,11 +30,11 @@ class OrderPaymentController extends Controller
 
         return response()->json([
             'payment' => [
-                'id'        => $payment->id,
+                'id' => $payment->id,
                 'reference' => $payment->reference,
-                'status'    => $payment->status->value,
-                'amount'    => (float) $payment->amount,
-                'currency'  => $payment->currency,
+                'status' => $payment->status->value,
+                'amount' => (float) $payment->amount,
+                'currency' => $payment->currency,
                 // Aquí podrías incluir 'wompi_checkout_url' si lo generas en PaymentService
             ],
             'order' => OrderResource::make(

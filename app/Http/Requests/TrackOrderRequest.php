@@ -15,8 +15,8 @@ class TrackOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'order_number'    => ['required', 'string', 'max:50'],
-            'customer_email'  => ['required_without:document_number', 'email', 'max:150'],
+            'order_number' => ['required', 'string', 'max:50'],
+            'customer_email' => ['required_without:document_number', 'email', 'max:150'],
             'document_number' => ['required_without:customer_email', 'string', 'max:50'],
         ];
     }
@@ -24,8 +24,8 @@ class TrackOrderRequest extends FormRequest
     public function filters(): array
     {
         return [
-            'order_number'    => $this->input('order_number'),
-            'customer_email'  => $this->input('customer_email'),
+            'order_number' => $this->input('order_number'),
+            'customer_email' => $this->input('customer_email'),
             'document_number' => $this->input('document_number'),
         ];
     }

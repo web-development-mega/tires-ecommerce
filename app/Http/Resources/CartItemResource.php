@@ -13,18 +13,18 @@ class CartItemResource extends JsonResource
         $buyable = $this->whenLoaded('buyable');
 
         return [
-            'id'          => $this->id,
-            'quantity'    => $this->quantity,
-            'unit_price'  => (float) $this->unit_price,
-            'discount'    => (float) $this->discount_amount,
-            'total'       => (float) $this->total,
-            'meta'        => $this->meta,
+            'id' => $this->id,
+            'quantity' => $this->quantity,
+            'unit_price' => (float) $this->unit_price,
+            'discount' => (float) $this->discount_amount,
+            'total' => (float) $this->total,
+            'meta' => $this->meta,
 
-            'product'     => $buyable ? [
-                'id'    => $buyable->id,
-                'type'  => class_basename($this->buyable_type),
-                'name'  => $buyable->name ?? null,
-                'slug'  => $buyable->slug ?? null,
+            'product' => $buyable ? [
+                'id' => $buyable->id,
+                'type' => class_basename($this->buyable_type),
+                'name' => $buyable->name ?? null,
+                'slug' => $buyable->slug ?? null,
             ] : null,
         ];
     }

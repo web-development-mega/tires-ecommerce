@@ -12,8 +12,7 @@ class TireSearchService
 {
     public function __construct(
         private readonly int $defaultPerPage = 20
-    ) {
-    }
+    ) {}
 
     /**
      * Search tires compatible with a given vehicle.

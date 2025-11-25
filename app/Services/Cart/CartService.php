@@ -7,16 +7,13 @@ use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Tire;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
 class CartService
 {
     public function __construct(
         private readonly int $defaultPerPage = 20
-    ) {
-    }
+    ) {}
 
     /**
      * Resolve or create an active cart for given token and/or user.
@@ -93,15 +90,15 @@ class CartService
                 $item->unit_price = $unitPrice; // optional: keep last price or preserve first
             } else {
                 $item = new CartItem([
-                    'buyable_type'   => Tire::class,
-                    'buyable_id'     => $tire->id,
-                    'quantity'       => $quantity,
-                    'unit_price'     => $unitPrice,
-                    'discount_amount'=> 0,
-                    'total'          => 0, // will be recalculated
-                    'meta'           => [
+                    'buyable_type' => Tire::class,
+                    'buyable_id' => $tire->id,
+                    'quantity' => $quantity,
+                    'unit_price' => $unitPrice,
+                    'discount_amount' => 0,
+                    'total' => 0, // will be recalculated
+                    'meta' => [
                         'label' => $tire->name,
-                        'size'  => $tire->tireSize?->label,
+                        'size' => $tire->tireSize?->label,
                     ],
                 ]);
 

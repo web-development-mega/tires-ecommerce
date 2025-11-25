@@ -1,9 +1,9 @@
 <?php
 
+use App\Enums\CartStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-use App\Enums\CartStatus;
 
 return new class extends Migration
 {

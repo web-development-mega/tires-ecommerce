@@ -28,11 +28,11 @@ class Payment extends Model
     ];
 
     protected $casts = [
-        'status'             => PaymentStatus::class,
-        'payment_method_type'=> PaymentMethodType::class,
-        'amount'             => 'decimal:2',
-        'provider_payload'   => 'array',
-        'meta'               => 'array',
+        'status' => PaymentStatus::class,
+        'payment_method_type' => PaymentMethodType::class,
+        'amount' => 'decimal:2',
+        'provider_payload' => 'array',
+        'meta' => 'array',
     ];
 
     public function order(): BelongsTo
